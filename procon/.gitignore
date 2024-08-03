@@ -1,0 +1,15 @@
+python/*
+rust/*
+!python/*.*
+!rust/*.*
+.vscode
+.cargo
+target
+__pycache__
+*/__pycache__
+*/*/__pycache__
+*/target
+*/*/history
+*/*/tools
+*/*/__temp
+tools.zip

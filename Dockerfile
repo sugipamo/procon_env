@@ -38,7 +38,7 @@ COPY --from=rust-setup /cargo-compete/target/release/cargo-compete /usr/local/bi
 
 # SSH設定の追加
 RUN mkdir /var/run/sshd && \
-    echo "root:${ROOT_PASSWORD}" | chpasswd && \
+    echo "root:your_password" | chpasswd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 

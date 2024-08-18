@@ -15,7 +15,8 @@ RUN apt-get update && \
     apt-get install -y \
     build-essential \
     git \
-    curl
+    curl \
+    openssh-server  # SSHサーバーをインストール
 
 # PyPy3 をインストール
 COPY --from=pypy-setup /opt/pypy /opt/pypy
@@ -30,6 +31,22 @@ ENV PATH="/root/.cargo/bin:$PATH"
 
 # cargo-compete をインストール
 COPY --from=rust-setup /cargo-compete/target/release/cargo-compete /usr/local/bin/cargo-compete
+
+# .envファイルから環境変数を読み込む
+# Docker Composeを使用してコンテナを起動する場合は、以下の行は不要です。
+# ENV ROOT_PASSWORD=${ROOT_PASSWORD}
+
+# SSH設定の追加
+RUN mkdir /var/run/sshd && \
+    echo "root:${ROOT_PASSWORD}" | chpasswd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# SSHのポートを公開
+EXPOSE 22
+
+# SSHサービスを起動
+CMD ["/usr/sbin/sshd", "-D"]
 
 # 作業ディレクトリを設定
 WORKDIR /workspace

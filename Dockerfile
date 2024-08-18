@@ -32,13 +32,10 @@ ENV PATH="/root/.cargo/bin:$PATH"
 # cargo-compete をインストール
 COPY --from=rust-setup /cargo-compete/target/release/cargo-compete /usr/local/bin/cargo-compete
 
-# .envファイルから環境変数を読み込む
-# Docker Composeを使用してコンテナを起動する場合は、以下の行は不要です。
-# ENV ROOT_PASSWORD=${ROOT_PASSWORD}
-
 # SSH設定の追加
+ARG ROOT_PASSWORD
 RUN mkdir /var/run/sshd && \
-    echo "root:your_password" | chpasswd && \
+    echo "root:$ROOT_PASSWORD" | chpasswd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 

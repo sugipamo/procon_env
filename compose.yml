@@ -2,13 +2,13 @@ services:
   app:
     build:
       context: .
+      args:
+        - ROOT_PASSWORD=${ROOT_PASSWORD}
       dockerfile: Dockerfile
     image: my-rust-pypy-app
     container_name: rust_pypy_app
     ports:
       - "22:22"
-    env_file:
-      - .env
     volumes:
       - ./procon:/procon # ソースコードのマウント（開発中にコードを変更するため）
     environment:

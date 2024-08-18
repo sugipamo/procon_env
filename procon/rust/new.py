@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import os
+from pathlib import Path
 
 TEMPLATE = """"""
 
@@ -17,7 +18,8 @@ else:
     j = {"rust-analyzer.linkedProjects":[]}
 j["rust-analyzer.linkedProjects"].append(f"./rust/{contest_name}/Cargo.toml")
 j["rust-analyzer.linkedProjects"] = list(set(j["rust-analyzer.linkedProjects"]))
-    
+
+Path("./../.vscode/").mkdir(parents=True,exist_ok=True)
 with open("./../.vscode/settings.json", "w") as f:
     f.write(json.dumps(j))
 

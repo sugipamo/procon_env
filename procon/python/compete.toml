@@ -48,6 +48,8 @@ fn get_python_script_path() -> Result<PathBuf, Box<dyn std::error::Error>> {
         .parent()
         .and_then(|p| p.parent())
         .and_then(|p| p.parent())
+        .and_then(|p| p.parent())
+        .and_then(|p| p.parent())
         .ok_or("Failed to get parent directory")?;
 
     let file_name = current_file_path

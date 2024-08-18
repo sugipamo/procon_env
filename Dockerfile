@@ -40,7 +40,8 @@ RUN mkdir /var/run/sshd && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 # SSHのポートを公開
-EXPOSE 22
+ARG PORT
+EXPOSE $PORT
 
 # SSHサービスを起動
 CMD ["/usr/sbin/sshd", "-D"]

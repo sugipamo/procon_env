@@ -33,11 +33,20 @@ ENV PATH="/root/.cargo/bin:$PATH"
 COPY --from=rust-setup /cargo-compete/target/release/cargo-compete /usr/local/bin/cargo-compete
 
 # SSH設定の追加
-ARG ROOT_PASSWORD
 RUN mkdir /var/run/sshd && \
-    echo "root:$ROOT_PASSWORD" | chpasswd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config && \
+    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config && \
+    echo 'AuthorizedKeysFile .ssh/Authorized_keys' >> /etc/ssh/sshd_config
+
+# SSH公開鍵認証を設定
+RUN mkdir -p /root/.ssh && \
+    chmod 700 /root/.ssh
+
+# `Authorized_keys`ファイルをコンテナにコピー
+COPY Authorized_keys /root/.ssh/Authorized_keys
+RUN chmod 600 /root/.ssh/Authorized_keys && \
+    chown root:root /root/.ssh/Authorized_keys
 
 # SSHのポートを公開
 ARG PORT
@@ -47,4 +56,4 @@ EXPOSE $PORT
 CMD ["/usr/sbin/sshd", "-D"]
 
 # 作業ディレクトリを設定
-WORKDIR /workspace
+WORKDIR /procon

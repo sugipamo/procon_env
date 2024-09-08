@@ -3,7 +3,6 @@ services:
     build:
       context: .
       args:
-        - ROOT_PASSWORD=${ROOT_PASSWORD}
         - PORT=${PORT}
       dockerfile: Dockerfile
     image: my-rust-pypy-app
@@ -15,3 +14,4 @@ services:
     environment:
       - PYTHONPATH=/procon # 必要に応じて環境変数を設定
     tty: true # 仮想端末を有効にする
+    restart: always
